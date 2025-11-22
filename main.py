@@ -56,13 +56,14 @@ def main():
           if event.type == pygame.QUIT:
             running = False
           elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bullet = Bullet(assets, player.rect.centerx, player.rect.top)
-                bullet2 = Bullet(assets, player.rect.x, player.rect.top)
-                all_sprites.add(bullet)
-                all_sprites.add(bullet2)
-                bullets.add(bullet2)
-                bullets.add(bullet)
+              if event.key == pygame.K_SPACE:
+
+                  for i in range(36):   # 36 bullets around the player
+                      angle = i * 10
+                      b = Bullet(assets, player.rect.centerx, player.rect.centery, angle)
+                      all_sprites.add(b)
+                      bullets.add(b)
+
         keys = pygame.key.get_pressed()
         spawn_timer+=1
         if spawn_timer>=spawn_interval:
@@ -71,7 +72,10 @@ def main():
             alien = Alien(assets, x, -60)
             all_sprites.add(aliens)
             aliens.add(alien)
-        all_sprites.update(keys)
+        player.update(keys)
+        bullets.update()
+        aliens.update()
+
         hits = pygame.sprite.groupcollide(aliens, bullets, True, True)
         if hits:
             score+=len(hits)*10
